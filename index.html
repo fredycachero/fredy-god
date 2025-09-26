@@ -1,79 +1,164 @@
-// Estado del juego
-let currentPlayer = 'X';
-let board = ['', '', '', '', '', '', '', '', ''];
-let gameActive = true;
-
-// Referencias del tablero y el botón
-const boardElement = document.getElementById('board');
-const resetButton = document.getElementById('resetButton');
-
-// Crear el tablero de juego
-function createBoard() {
-    boardElement.innerHTML = '';
-    board.forEach((cell, index) => {
-        const cellElement = document.createElement('div');
-        cellElement.classList.add('cell');
-        cellElement.textContent = cell;
-        cellElement.dataset.index = index;
-        cellElement.addEventListener('click', handleCellClick);
-        boardElement.appendChild(cellElement);
-    });
-}
-
-// Lógica cuando se hace clic en una celda
-function handleCellClick(event) {
-    const index = event.target.dataset.index;
-
-    // Si la celda está ocupada o el juego terminó, no hacer nada
-    if (board[index] !== '' || !gameActive) return;
-
-    // Marca la celda con el jugador actual
-    board[index] = currentPlayer;
-    event.target.textContent = currentPlayer;
-
-    // Verifica si hay un ganador
-    if (checkWinner()) {
-        alert(`${currentPlayer} ha ganado!`);
-        gameActive = false;
-        return;
-    }
-
-    // Cambia al siguiente jugador
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-
-    // Verifica si el tablero está lleno (empate)
-    if (!board.includes('')) {
-        alert('¡Es un empate!');
-        gameActive = false;
-    }
-}
-
-// Verifica si hay un ganador
-function checkWinner() {
-    const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Filas
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columnas
-        [0, 4, 8], [2, 4, 6] // Diagonales
-    ];
-
-    for (let pattern of winPatterns) {
-        const [a, b, c] = pattern;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return true;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 en Raya - Fredy Vargas Mamani</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-    }
 
-    return false;
-}
+        .container {
+            text-align: center;
+        }
 
-// Reiniciar el juego
-resetButton.addEventListener('click', () => {
-    board = ['', '', '', '', '', '', '', '', ''];
-    currentPlayer = 'X';
-    gameActive = true;
-    createBoard();
-});
+        h1 {
+            color: #333;
+        }
 
-// Inicializa el juego
-createBoard();
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            grid-gap: 10px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border: 2px solid #333;
+            font-size: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cell:hover {
+            background-color: #f0f0f0;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Juego de 3 en Raya</h1>
+        <div class="board" id="board"></div>
+        <button id="resetButton">Reiniciar Juego</button>
+        <footer>
+            <p>Autor: Fredy Vargas Mamani</p>
+        </footer>
+    </div>
+
+    <script>
+        // Estado del juego
+        let currentPlayer = 'X';
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        // Referencias del tablero y el botón
+        const boardElement = document.getElementById('board');
+        const resetButton = document.getElementById('resetButton');
+
+        // Crear el tablero de juego
+        function createBoard() {
+            boardElement.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add('cell');
+                cellElement.textContent = cell;
+                cellElement.dataset.index = index;
+                cellElement.addEventListener('click', handleCellClick);
+                boardElement.appendChild(cellElement);
+            });
+        }
+
+        // Lógica cuando se hace clic en una celda
+        function handleCellClick(event) {
+            const index = event.target.dataset.index;
+
+            // Si la celda está ocupada o el juego terminó, no hacer nada
+            if (board[index] !== '' || !gameActive) return;
+
+            // Marca la celda con el jugador actual
+            board[index] = currentPlayer;
+            event.target.textContent = currentPlayer;
+
+            // Verifica si hay un ganador
+            if (checkWinner()) {
+                alert(`${currentPlayer} ha ganado!`);
+                gameActive = false;
+                return;
+            }
+
+            // Cambia al siguiente jugador
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+            // Verifica si el tablero está lleno (empate)
+            if (!board.includes('')) {
+                alert('¡Es un empate!');
+                gameActive = false;
+            }
+        }
+
+        // Verifica si hay un ganador
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Filas
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columnas
+                [0, 4, 8], [2, 4, 6] // Diagonales
+            ];
+
+            for (let pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Reiniciar el juego
+        resetButton.addEventListener('click', () => {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameActive = true;
+            createBoard();
+        });
+
+        // Inicializa el juego
+        createBoard();
+    </script>
+</body>
+</html>
 
